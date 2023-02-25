@@ -112,3 +112,41 @@ function createTeam() {
       }
     });
 }
+
+function continueTeam() {
+  inquirer
+    .prompt([
+      {
+        type: "list",
+        name: "continue",
+        message: "Add another team member?",
+        choices: ["Yes", "No"],
+      },
+    ])
+    .then((answers) => {
+      if (answers.continue === "Yes") {
+        createTeam();
+      } else {
+        if (!fs.existsSync(OUTPUT_DIR)) {
+          fs.mkdir(OUTPUT_DIR, function (err) {
+            if (err) {
+              console.log(err);
+            }
+          });
+          fs.writeFile(outputPath, render(employees), "utf-8", function (err) {
+            if (err) {
+              console.log(err);
+            }
+          });
+        } else {
+          fs.writeFile(outputPath, render(employees), "utf-8", function (err) {
+            if (err) {
+              console.log(err);
+            }
+          });
+        }
+      }
+    });
+}
+
+createTeam();
